@@ -1,0 +1,31 @@
+---
+title: "Total Carbon Emissions Report"
+format:
+  html:
+    toc: true
+    theme: cosmo
+    code-fold: true
+execute:
+  echo: true
+  warning: false
+  message: false
+jupyter: python3
+---
+
+## Setup
+
+```{python}
+import pandas as pd
+
+# Change to your path or keep the sample
+df = pd.read_csv("emissions_sample.csv", parse_dates=["date"])
+
+# Ensure emissions column exists
+if "emissions_kgco2e" not in df.columns:
+    df["emissions_kgco2e"] = df["activity_amount"] * df["emission_factor_kgco2e_per_unit"]
+
+df["scope"] = df["scope"].astype(str)
+if "month" not in df.columns:
+    df["month"] = df["date"].dt.strftime("%Y-%m")
+
+df.head()
